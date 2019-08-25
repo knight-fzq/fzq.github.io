@@ -1,0 +1,346 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'abcdef'"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#序列练习\n",
+    "#字符串\n",
+    "#声明字符串\n",
+    "x=\"abcdef\"\n",
+    "print(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "d\n",
+      "abc\n",
+      "f\n"
+     ]
+    }
+   ],
+   "source": [
+    "#引用字符串\n",
+    "x=\"abcdef\"\n",
+    "print(x[3])\n",
+    "print(x[0:3])\n",
+    "#x[end]\n",
+    "print(x[-1])\n",
+    "#x[0:5:2]\n",
+    "#end不属于序列的索引下标"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "True\n",
+      "False\n",
+      "abcdefghi\n",
+      "abcdefabcdefabcdef\n"
+     ]
+    }
+   ],
+   "source": [
+    "#字符串操作\n",
+    "#in\n",
+    "print('a'in x)\n",
+    "print('g'in x)\n",
+    "y=\"ghi\"\n",
+    "#序列的加法运算\n",
+    "print(x+y)\n",
+    "#序列的乘法运算\n",
+    "print(x*3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('abc', 23, 'def')\n",
+      "23\n",
+      "def\n",
+      "('abc', 23)\n",
+      "(('abc', 23, 'def'), 'a', 600)\n",
+      "(('abc', 23, 'def'), {'shuxue': 23})\n"
+     ]
+    }
+   ],
+   "source": [
+    "#元组，const数组,区别是里面元素类型不限,甚至可以是元组,字典,用（）和，，（）可以不需要\n",
+    "x=(\"abc\",23,\"def\")\n",
+    "x=\"abc\",23,\"def\"\n",
+    "print(x)\n",
+    "print(x[1])\n",
+    "print(x[-1])\n",
+    "print(x[0:2])\n",
+    "y=(x,'a',600)\n",
+    "print(y)\n",
+    "z={\"shuxue\":23}\n",
+    "y=(x,z)\n",
+    "print(y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[12, 'abc']\n",
+      "2\n"
+     ]
+    },
+    {
+     "ename": "IndexError",
+     "evalue": "list assignment index out of range",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mIndexError\u001b[0m                                Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-41-e4a3ce1bb302>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[0;32m      4\u001b[0m \u001b[0mprint\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mlen\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mls\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      5\u001b[0m \u001b[1;31m#不可以直接定义\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m----> 6\u001b[1;33m \u001b[0mls\u001b[0m\u001b[1;33m[\u001b[0m\u001b[1;36m2\u001b[0m\u001b[1;33m]\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;36m11\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m      7\u001b[0m \u001b[0mprint\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mls\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
+      "\u001b[1;31mIndexError\u001b[0m: list assignment index out of range"
+     ]
+    }
+   ],
+   "source": [
+    "#列表list\n",
+    "ls=[12,\"abc\"]\n",
+    "print(ls)\n",
+    "print(len(ls))\n",
+    "#不可以直接定义超出索引的\n",
+    "ls[2]=11\n",
+    "print(ls)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['ab', 23, 44, 'def']\n",
+      "['ab', 23, 'ab', 23, 'ab', 23]\n",
+      "['ab']\n",
+      "[]\n",
+      "['abc', 'def', {'颜色': '绿色'}, 23]\n",
+      "['abc', 'def', {'颜色': '绿色'}, 23, 88]\n",
+      "['abc', 'def', {'颜色': '绿色'}, 23, 88, {'身高': 180}]\n",
+      "绿色\n",
+      "None\n"
+     ]
+    }
+   ],
+   "source": [
+    "#list方法\n",
+    "#+的重载\n",
+    "a=[\"ab\",23]\n",
+    "b=[44,\"def\"]\n",
+    "print(a+b)\n",
+    "#*的重载\n",
+    "print(a*3)\n",
+    "#del\n",
+    "del a[1]\n",
+    "print(a)\n",
+    "del b[0]\n",
+    "del b[0]\n",
+    "print(b)\n",
+    "#ls.append,在列表最后加入元素\n",
+    "c=[\"abc\",\"def\",{\"颜色\":\"绿色\"},23]\n",
+    "print(c)\n",
+    "c.append(88)\n",
+    "print(c)\n",
+    "c.append({\"身高\":180})\n",
+    "print(c)\n",
+    "print(c[2][\"颜色\"])\n",
+    "#list.clear\n",
+    "print(c.clear())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'身高': 180, '性别': '男', '体重': 60, '肺活量': 4000}\n",
+      "{'身高': 180, '性别': '男', '体重': 60, '肺活量': 4000, '年龄': 18}\n"
+     ]
+    }
+   ],
+   "source": [
+    "#字典,无序，是集合的延伸，索引方式类似于序列,下标不再是数字\n",
+    "#字典的声明定义\n",
+    "d={\"身高\":180,\"性别\":\"男\",\"体重\":60,\"肺活量\":4000}\n",
+    "print(d)\n",
+    "#直接插入声明\n",
+    "d[\"年龄\"]=18\n",
+    "print(d)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "18\n",
+      "男\n"
+     ]
+    }
+   ],
+   "source": [
+    "#字典的索引\n",
+    "print(d[\"年龄\"])\n",
+    "print(d[\"性别\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "dict_keys(['身高', '性别', '体重', '肺活量', '年龄'])\n",
+      "dict_values([180, '男', 60, 4000, 18])\n",
+      "dict_items([('身高', 180), ('性别', '男'), ('体重', 60), ('肺活量', 4000), ('年龄', 18)])\n",
+      "未找到\n",
+      "男\n",
+      "未找到\n",
+      "男\n"
+     ]
+    }
+   ],
+   "source": [
+    "#字典的方法\n",
+    "#d.keys,返回全部键\n",
+    "print(d.keys())\n",
+    "#d.values,返回全部值\n",
+    "print(d.values())\n",
+    "#d.items,返回全部键和值\n",
+    "print(d.items())\n",
+    "#d.get(索引的键，否的返回值)\n",
+    "print(d.get(\"胸围\",\"未找到\"))\n",
+    "print(d.get(\"性别\"))\n",
+    "#d.pop同上\n",
+    "print(d.pop(\"胸围\",\"未找到\"))\n",
+    "print(d.pop(\"性别\"))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "身高\n",
+      "体重\n",
+      "肺活量\n",
+      "年龄\n",
+      "身高\n",
+      "体重\n",
+      "肺活量\n",
+      "年龄\n",
+      "身高\n",
+      "180\n",
+      "体重\n",
+      "60\n",
+      "肺活量\n",
+      "4000\n",
+      "年龄\n",
+      "18\n"
+     ]
+    }
+   ],
+   "source": [
+    "#for的搭配索引，无论k是什么得到的都是键的名称\n",
+    "for key in d:\n",
+    "    print(key)\n",
+    "for value in d:\n",
+    "    print(value)\n",
+    "for k in d:\n",
+    "    #模拟d.keys\n",
+    "    print(k)\n",
+    "    #模拟d.values\n",
+    "    print(d[k])\n",
+    "    \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
