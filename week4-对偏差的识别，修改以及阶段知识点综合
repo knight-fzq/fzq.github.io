@@ -1,0 +1,141 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[141]:
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+#creat data set for training,each variable have one feature
+#function for training is 4x^3+7x^2+11x+20
+#define m is the number of training data
+#define trainx is the variate with three features
+#define trainy is the value function(trainx) with small bias
+
+
+m=200
+trainx=200*np.random.random((1,m))-100      #trainx is from -100 to 100
+trainy=4*trainx[0,:]**3+7*trainx[0,:]**2+11*trainx[0,:]+20+20*np.random.random((1,m))
+
+
+
+#find the max and min value of trainx
+#nomalize trainx to keep feature is nealy ranging from -1 to 1
+
+
+xmax=np.max(trainx)
+xmin=np.min(trainx)
+trainx=(trainx-(xmax+xmin)/2)/(xmax-xmin)*2     #get the normalized trainx
+
+
+
+
+#define degree is the degree of polynomial of hypothesis function
+#define h is the hypothesis function 
+#add bias,x,x^2....x^degree to train_x
+
+
+degree=4
+
+def addbias(trainx,degree): 
+    exchange=np.ones((1,m))
+    for i in range(degree):
+        exchange=np.concatenate((exchange,trainx**(i+1)),0)   
+    trainx=exchange       #get the matrix of [1,x,x^2...]'
+    return trainx
+
+trainx=addbias(trainx,degree)   #assume the degree is 3
+
+
+#define train_x is the data set for training cost function
+#define cv_x is the data set for cross validation
+#define test_x is the data set for testing hypothesis function
+#the similar defination of train_y,cv_y and test_y
+
+
+train_x=trainx[:,0:120]
+train_y=trainy[:,0:120]
+cv_x=trainx[:,120:160]
+cv_y=trainy[:,120:160]
+test_x=trainx[:,160:200]
+test_y=trainy[:,160:200]
+
+
+
+
+#define iteration is the iteration times
+#define alpha is the learning rate
+#define delta is the derivative of Jtrain with respect to theta  
+#define theta is the parameter of this algorithom
+#define train_pre is the prediction value of train_x via gradient decent algorithom
+#the same way to define test_pre and cv_pre
+#define Jtrain is the error between predicion with given data 
+#the same way to define Jcv and Jtest
+
+
+iteration=1000
+alpha=0.01
+theta=np.random.random((1,degree+1))/100
+
+#initialize the Jtrain,Jcv,Jtest
+Jtrain=np.zeros((1,iteration))
+Jcv=np.zeros((1,iteration))
+Jtest=np.zeros((1,iteration))
+
+for j in range(iteration):
+    #calculate the value of train_pre,cv_pre,test_pre
+    train_pre=theta.dot(train_x)
+    cv_pre=theta.dot(cv_x)
+    test_pre=theta.dot(test_x)
+    
+    #calculate the value of Jtrain,Jcv and Jtest
+    Jtrain[0,j]=1/m/2*np.sum((train_pre-train_y)**2)
+    Jcv[0,j]=1/m/2*np.sum((cv_pre-cv_y)**2)
+    Jtest[0,j]=1/m/2*np.sum((test_pre-test_y)**2)
+    
+    #calculate derivative
+    delta=1/m*(train_pre-train_y).dot(train_x.T)
+    
+    #update theta though gradient decent algorithom
+    theta=theta-alpha*delta
+
+    
+
+    
+#define tt is the x-axis of Jtrain,Jcv and Jtest
+#plot the Jtrain(tt),it shows the Jtrain when itetate tt times
+#the same way to show Jcv and Jtest
+#though scatter,we can determine whether the algorithom reaches convergence 
+#besides,we can fine whether the algorithom is in the state of high bias or high variance
+
+
+tt=np.arange(iteration)+1
+tt=tt[np.newaxis,:]
+plt.scatter(tt,Jtrain)
+plt.scatter(tt,Jcv)
+plt.scatter(tt,Jtest)
+plt.show()
+
+
+
+
+#output the parameter we need
+
+
+print("theta:")
+print(theta)
+print("Jtrain:")
+print(np.min(Jtrain))
+print("Jcv:")
+print(np.min(Jcv))
+print("Jtest:")
+print(np.min(Jtest))
+
+
+# In[ ]:
+
+
+
+
