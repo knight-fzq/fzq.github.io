@@ -1,0 +1,136 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[8]:
+
+
+import numpy as np
+import matplotlib as plt
+'''
+数据初始化xi并且规范化，得到x
+'''
+x1=np.array([[256,336,336,336,598,336,256,598,598,598,598,336,256,336,336,336,256,598,598,680]])
+x2=np.array([[72,96,51,87,168,132,42,222,252,252,222,108,102,96,108,108,78,252,252,444]])
+x3=np.array([[24,28,24,52,34,52,28,36,48,32,32,28,24,52,28,32,52,48,52,32]])
+x4=np.array([[16,16,8,16,64,16,16,64,64,64,64,8,32,16,16,16,32,128,64,32]])
+x5=np.array([[4079,2900,1900,3740,4390,6050,1580,6500,18500,7508,8800,5030,6800,6050,3870,4999,3630,25300,9800,9782]])
+x1_r=(x1-np.average(x1))/(np.max(x1)-np.min(x1))
+x2_r=(x2-np.average(x2))/(np.max(x2)-np.min(x2))
+x3_r=(x3-np.average(x3))/(np.max(x3)-np.min(x3))
+x4_r=(x4-np.average(x4))/(np.max(x4)-np.min(x4))
+x5_r=(x5-np.average(x5))/(np.max(x5)-np.min(x5))
+x=np.concatenate((x1_r,x2_r,x3_r,x4_r,x5_r),0)
+
+
+
+'''
+center为聚类中心，c_num为聚类数量,初始化聚类中心center
+选择两个分类，初始化选择第1个和最后一个数据为中心，后续随机选择
+
+'''
+c_num=2
+center=np.array([[x[:,0],x[:,8]]])
+count_0=0;
+count_1=0;
+#print(np.sum((x[:,2]-center[:,0])**2))
+
+
+
+
+'''
+根据中心给所有数据分类
+'''
+c_x=np.zeros((1,20))
+for i in range(20):
+    if np.sum((x[:,i]-center[:,0])**2)<np.sum((x[:,i]-center[:,1])**2):
+        c_x[0,i]=0
+        count_0=count_0+1;
+    else:
+        c_x[0,i]=1
+        count_1=count_1+1;
+
+
+        
+        
+'''
+移动聚类中心
+'''
+center=np.zeros((5,2))
+for i in range(20):
+    if c_x[0,i]==0:
+        center[:,0]=center[:,0]+x[:,i]
+    else:
+        center[:,1]=center[:,1]+x[:,i]
+center[:,0]=center[:,0]/count_0
+center[:,1]=center[:,1]/count_1
+#print(center)
+count_0=0;
+count_1=0;
+
+
+
+'''
+计算第一次的代价函数loss
+'''
+first=0
+for i in range(20):
+    if c_x[0,1]==0:
+        first=first+np.sum((x[:,i]-center[:,0])**2)
+    else:
+        first=first+np.sum((x[:,i]-center[:,1])**2)
+print(first)
+
+
+
+
+'''
+迭代次数iteration，进入迭代
+'''
+iteration=10
+loss=np.zeros((1,iteration))
+for j in range(iteration):
+    #根据聚类中心分类
+    for i in range(20):
+        if np.sum((x[:,i]-center[:,0])**2)<np.sum((x[:,i]-center[:,1])**2):
+            c_x[0,i]=0
+            count_0=count_0+1
+        else:
+            c_x[0,i]=1
+            count_1=count_1+1
+    #移动聚类中心
+    center=np.zeros((5,2))
+    for i in range(20):
+        if c_x[0,i]==0:
+            center[:,0]=center[:,0]+x[:,i]
+        else:
+            center[:,1]=center[:,1]+x[:,i]
+    center[:,0]=center[:,0]/count_0
+    center[:,1]=center[:,1]/count_1
+    #print(center)
+    count_0=0
+    count_1=0
+    #计算代价函数
+    for i in range(20):
+        if c_x[0,i]==0:
+            loss[0,j]=loss[0,j]+np.sum((x[:,i]-center[:,0])**2)
+        else:
+            loss[0,j]=loss[0,j]+np.sum((x[:,i]-center[:,1])**2)
+
+            
+            
+#查看是否收敛并且输出
+print(loss)
+#print(center)
+center[0,:]=center[0,:]*(np.max(x1)-np.min(x1))+np.average(x1)
+center[1,:]=center[1,:]*(np.max(x2)-np.min(x2))+np.average(x2)
+center[2,:]=center[2,:]*(np.max(x3)-np.min(x3))+np.average(x3)
+center[3,:]=center[3,:]*(np.max(x4)-np.min(x4))+np.average(x4)
+center[4,:]=center[4,:]*(np.max(x5)-np.min(x5))+np.average(x5)
+print(center)
+
+
+# In[ ]:
+
+
+
+
