@@ -1,0 +1,149 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[17]:
+
+
+'''
+主要是展示tensorboard的可视化效果
+tensorboard可以将训练过程中各种回执数据展示，包括标量，图片，音频，计算图，数据分布，直方图和嵌入式向量
+通过网页来观察模型的结构和训练过程中各个参数的变化
+tensorboard是日志展示系统，在session中运算图时，将各种类型的数据汇总输出到日志文件中
+启动tensorboard服务，tensorboard读取这些日志文件，并开启6060端口提供web服务，用户可以在浏览器中查看数据
+writer=tf.summary.FileWriter("D:/ai",sess.graph)
+cmd 中(要在conda中，在自己配置的环境里不行)tensorboard --logdir D:\ai       #输入文件位置summary.Filewriter保存的文件位置
+会返回一个浏览器地址，可以查看日志内容
+
+'''
+import tensorflow as tf 
+import matplotlib.pyplot as plt
+import numpy as np
+
+#导入模块
+plotdata={"batchsize":[],"loss":[]}                     #batchsize:随机梯度下降中的小批的大小
+def moving_average(a,w=10):
+    if len(a)<w:
+        return a[:]
+    return [val if idx<w else sum(a[(idx-w):idx])/w for idx, val in enumerate(a)]
+
+#生成模拟数据
+train_X=np.linspace(-1,1,100)                           #np.linspace(first,end,number)
+train_Y=2*train_X+np.random.randn(*train_X.shape)*0.3   #y=2x,且加入一定的噪声
+
+#图像显示
+plt.plot(train_X,train_Y,"ro",label="Original data")
+plt.legend()                                            #给图像加上图例
+plt.show()
+
+#重置计算图
+tf.reset_default_graph()
+
+#创建模型
+X=tf.placeholder("float")                               #计算图
+Y=tf.placeholder("float")
+
+#模型参数
+W=tf.Variable(tf.random_normal([1]),name="weight")
+b=tf.Variable(tf.zeros([1]),name="bias")
+
+#构建前向结构
+z=tf.multiply(X,W)+b                                    #z=wx+b
+tf.summary.histogram("z",z)                             #预测值以直方图显示
+
+#反向优化
+cost=tf.reduce_mean(tf.square(Y-z))                     #cost: (y-y')^2
+tf.summary.scalar("loss_function",cost)                 #损失loss/cost以标量显示
+learning_rate=0.01
+optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost) #梯度下降
+
+#初始化全部变量(节点，还未运行)
+init=tf.global_variables_initializer()
+
+#参数设置
+training_epochs=20                                     #将整个数据集训练20次
+display_step=2
+
+#启动会话
+with tf.Session() as sess:
+    sess.run(init)
+    #合并所有的summary
+    merged_summary_op=tf.summary.merge_all()             #tensorboard:summary,在不同的地方以不同的形式存储，summary.merge_all合并
+                                                         #，summary_writer,存储图，用于写文件,最后run合并，用writer.add写入文件      
+    summary_writer=tf.summary.FileWriter("D:/ai",sess.graph)
+    
+    #模型中输入数据
+    for epoch in range(training_epochs):                #训练epoch次
+        for(x,y) in zip(train_X,train_Y):
+            sess.run(optimizer,feed_dict={X:x,Y:y})
+            
+            #生成summary
+            summary_str=sess.run(merged_summary_op,feed_dict={X:x,Y:y}) ;  #调用之前定义过的节点，生成summary
+            summary_writer.add_summary(summary_str,epoch);                 #将summary写入文件
+        
+        #显示训练中的详细信息
+        if epoch%display_step == 0:                      #每训练数据display_step轮，则....，这里的display_step定义的为2
+            loss=sess.run(cost,feed_dict={X:train_X,Y:train_Y})
+            print("Epoch:",epoch+1,'cost=',loss,"W=",sess.run(W),"b=",sess.run(b))
+            if not(loss=="NA"):
+                plotdata["batchsize"].append(epoch)       #将batchsize增加epoch元素
+                plotdata["loss"].append(loss)             #将loss增加loss元素
+        print("Finished!")
+        print("cost=",sess.run(cost,feed_dict={X:train_X,Y:train_Y}),"W=",sess.run(W),"b=",sess.run(b))
+        print("cost:",cost.eval({X:train_X,Y:train_Y}))
+        
+        #图像化展示
+        plt.plot(train_X,train_Y,"ro",label="original data")   #训练集x，y
+        plt.plot(train_X,sess.run(W)*train_X+sess.run(b),label='Fitted line')   #预测集x，y'
+        plt.legend()
+        plt.show()
+        plotdata["avgloss"]=moving_average(plotdata["loss"])   #计算平均损失率
+        plt.figure(1)                                     #第一个窗口
+        plt.subplot(2,1,1)                                #原文好像是subplot(211),有误
+        plt.plot(plotdata["batchsize"],plotdata["avgloss"],"b--")   #平均损失随输出训练次数的图像
+        plt.xlabel("minibatch number")
+        plt.ylabel("loss")
+        plt.title("minibatch run vs. training loss")
+        plt.show()
+        
+        
+        #模型结果测试
+        print("x=0.2,z=",sess.run(z,feed_dict={X:0.2}))
+        
+
+
+'''
+测试tensorboard
+import numpy as np
+#import matplotlib.pyplot as plt
+with tf.name_scope("graph")as scope:
+    a=tf.constant(1,name="a")
+    b=tf.constant(2,name="b")
+    add=tf.add(a,b,name="add")
+sess=tf.Session()
+
+writer=tf.summary.FileWriter("D:/ai",sess.graph)
+init=tf.global_variables_initializer()
+sess.run(init)
+'''
+
+'''
+name=tf.placeholder(
+dtype,
+shape=None,
+name=None,
+)
+
+测试:
+x=tf.placeholder("float")
+y=tf.placeholder("float")
+mult=tf.multiply(x,y)
+with tf.Session() as sess:
+    print(sess.run(mult,feed_dict={x:[1.3],y:[2.4]}))
+'''
+
+
+# In[ ]:
+
+
+
+
